@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/tvSelectFromGallary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select from gallary"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="#000000"
+        android:padding="10dp"/>
+
+    <TextView
+        android:id="@+id/tvClickFromCamera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Click from camera"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="#000000"
+        android:padding="10dp"/>
+
+
+    <TextView
+        android:id="@+id/tvRemovePicture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remove"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="#000000"
+        android:padding="10dp"/>
+
+    <TextView
+        android:id="@+id/tvCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="#000000"
+        android:padding="10dp"/>
+
+</LinearLayout>
