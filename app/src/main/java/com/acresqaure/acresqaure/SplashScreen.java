@@ -10,6 +10,10 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
+import com.acresqaure.acresqaure.Constants.GlobalData;
+import com.acresqaure.acresqaure.Constants.SharedPreferencesKey;
+import com.acresqaure.acresqaure.Utility.SharedPrefUtility;
+
 public class SplashScreen extends Activity {
 
     ImageView ivLogo;
@@ -23,6 +27,12 @@ public class SplashScreen extends Activity {
         getViewId();
         startAnimation();
         startSplashScreenTimer();
+        setSessionIfSaved();
+    }
+
+    public void setSessionIfSaved(){
+        SharedPrefUtility sharedPrefUtility=new SharedPrefUtility(this);
+        GlobalData.session=sharedPrefUtility.getString(SharedPreferencesKey.SESSION_KEY,"");
     }
 
     public void getViewId(){

@@ -30,6 +30,11 @@ public class Utility {
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
+    public static void showKeyboard(Context context,EditText editText){
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+    }
+
     public static void showToast(Context context,String text){
         Toast.makeText(context,text,
                 Toast.LENGTH_SHORT).show();

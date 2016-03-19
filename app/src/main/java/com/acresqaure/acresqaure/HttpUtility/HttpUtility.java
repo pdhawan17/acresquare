@@ -1,6 +1,12 @@
 package com.acresqaure.acresqaure.HttpUtility;
 
+import android.content.Context;
+
+import com.acresqaure.acresqaure.Constants.GlobalData;
+import com.acresqaure.acresqaure.Constants.SharedPreferencesKey;
+import com.acresqaure.acresqaure.Utility.SharedPrefUtility;
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -11,6 +17,8 @@ import com.paxcel.volley.AppController;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -39,16 +47,20 @@ public class HttpUtility {
 
                 @Override
                  public Map<String, String> getHeaders() throws AuthFailureError {
-                    return headers;
+                    HashMap<String,String> apiHeaders= new HashMap<>();
+                    apiHeaders.putAll(headers);
+                    apiHeaders.put("Cookie",GlobalData.session);
+                    return apiHeaders;
                 }
             };
             AppController.getInstance().addToRequestQueue(request);
     }
 
-    public static void PostRequest(String url,String body, final ApiResponseListener apiResponseListener){
+    public static void PostRequest(final Context context,String url,String body, final ApiResponseListener apiResponseListener, final boolean isLogin){
 
         JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.POST,
                 url,body, new Response.Listener<JSONObject>() {
+
             @Override
             public void onResponse(JSONObject jsonObject) {
                 String json=jsonObject.toString();
@@ -59,7 +71,35 @@ public class HttpUtility {
             public void onErrorResponse(VolleyError volleyError) {
                  apiResponseListener.onError(volleyError);
             }
-        });
+        })
+
+        {
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                if(isLogin) {
+                    Map<String, String> responseHeaders = response.headers;
+                    Iterator myVeryOwnIterator = responseHeaders.keySet().iterator();
+                    while (myVeryOwnIterator.hasNext()) {
+                        String key = (String) myVeryOwnIterator.next();
+                        String value = (String) responseHeaders.get(key);
+                        if (key.equals("set-cookie")) {
+                            String[] arr = value.split(":");
+                            GlobalData.session = arr[0];
+                            SharedPrefUtility sharedPrefUtility=new SharedPrefUtility(context);
+                            sharedPrefUtility.saveString(SharedPreferencesKey.SESSION_KEY,GlobalData.session);
+                        }
+                    }
+                }
+                return super.parseNetworkResponse(response);
+            }
+            @Override
+             public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> sessionHashmap= new HashMap<>();
+                if(!isLogin) {
+                    sessionHashmap.put("Cookie", GlobalData.session);
+                }
+                return sessionHashmap;
+            }};
         AppController.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
@@ -81,7 +121,7 @@ public class HttpUtility {
                 }
             },file,"");*/
 
-        MultipartRequest multipartRequest =new MultipartRequest(url, file, "", new Response.Listener<String>() {
+        /*MultipartRequest multipartRequest =new MultipartRequest(url, file, "", new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 apiResponseListener.onResponse(s);
@@ -91,7 +131,19 @@ public class HttpUtility {
             public void onErrorResponse(VolleyError volleyError) {
                 apiResponseListener.onError(volleyError);
             }
-        });
+        });*/
+
+        MultipartRequest3 multipartRequest=new MultipartRequest3(url, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+
+            }
+        },file,null);
 
         AppController.getInstance().addToRequestQueue(multipartRequest);
 

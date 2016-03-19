@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:src="@drawable/logo_colored"
+        android:padding="3dp"
+        android:layout_margin="10dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="#9e9e9e"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="#575757"
+        android:textSize="@dimen/text_size_medium"
+        android:text="Please enter the OTP below"
+        android:layout_gravity="center"/>
+
+    <EditText
+        android:id="@+id/etOtp"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:textColor="#575757"
+        android:padding="3dp"
+        android:maxLength="4"
+        android:textSize="@dimen/text_size_large"
+        android:background="@drawable/round_corner_black_border"/>
+
+    <TextView
+        android:id="@+id/tvTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="#575757"
+        android:text="4:00 sec"
+        android:textSize="@dimen/text_size_very_small"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/tvResendOtp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/resend_otp"
+        android:textColor="#8dc63f"
+        android:visibility="gone"
+        android:textSize="@dimen/text_size_small"
+        android:layout_gravity="center"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginTop="10dp"
+        android:background="#9e9e9e"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <TextView
+            android:id="@+id/tvSubmit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:text="SUBMIT"
+            android:padding="10dp"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"
+            android:textColor="#8dc63f"
+            android:gravity="center"/>
+        <View
+            android:layout_width="0.1dp"
+            android:layout_height="match_parent"
+            android:background="#9e9e9e"/>
+        <TextView
+            android:id="@+id/tvCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:textStyle="bold"
+            android:text="CANCEL"
+            android:textColor="#ef321e"
+            android:padding="10dp"
+            android:textSize="@dimen/text_size_medium"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+</LinearLayout>

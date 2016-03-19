@@ -4,7 +4,7 @@ package com.acresqaure.acresqaure.HttpUtility;
  * Created by parasdhawan on 24/02/16.
  */
 public class URLs {
-    public static String HOST_URL= "http://finalrestapi.eu-1.evennode.com";
+    public static String HOST_URL= "http://acresquareapi.eu-1.evennode.com";
 
     public static String SIGNUP_URL = HOST_URL+"/sellersignup";
 

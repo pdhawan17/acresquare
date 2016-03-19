@@ -1,10 +1,12 @@
 package com.acresqaure.acresqaure;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -45,6 +47,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     Button btSignUp,btSignUpWithFb;
     Spinner spExperience;
     CircleImageView profile_image;
+    TextView tvUploadImage;
 
     final String VALIDATION_MSG="Please fill all the required fields before signup";
 
@@ -74,6 +77,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     public void setClickListeners(){
         btSignUp.setOnClickListener(this);
         profile_image.setOnClickListener(this);
+        tvUploadImage.setOnClickListener(this);
     }
 
     public void setSpinner(){
@@ -98,6 +102,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         btSignUp = (Button)view.findViewById(R.id.btSignUp);
         etPassword = (EditText)view.findViewById(R.id.etPassword);
         profile_image= (CircleImageView)view.findViewById(R.id.profile_image);
+        tvUploadImage = (TextView)view.findViewById(R.id.tvUploadImage);
     }
 
     @Override
@@ -118,12 +123,16 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             case R.id.profile_image:
                 addImage();
                 break;
+            case R.id.tvUploadImage:
+                addImage();
+                break;
         }
     }
 
 
     public void signUp(){
-            if(!image_path.equals("")) {
+        sendFormData();
+            /*if(!image_path.equals("")) {
                 if(Utility.isNetworkConnected(getActivity())) {
                     Utility.showProgressDialog(getActivity());
                     HttpUtility.uploadImageRequest(URLs.PROFILE_PIC_URL, new File(image_path), new HttpUtility.ApiResponseListener() {
@@ -148,14 +157,14 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 }
             }else {
 //                sendFormData();
-            }
+            }*/
 
     }
 
     public void sendFormData(){
         if(Utility.isNetworkConnected(getActivity())) {
             Utility.showProgressDialog(getActivity());
-            HttpUtility.PostRequest(URLs.SIGNUP_URL, getJson(), new HttpUtility.ApiResponseListener() {
+            HttpUtility.PostRequest(getActivity(),URLs.SIGNUP_URL, getJson(), new HttpUtility.ApiResponseListener() {
                 @Override
                 public void onResponse(String json) {
                     Utility.dismissProgressDialog();
@@ -172,7 +181,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                     Utility.dismissProgressDialog();
                     showRetryDialog(API_TYPE_FORM);
                 }
-            });
+            },false);
         }else {
             Utility.showMessageDialog(getActivity(), TextConstants.NO_INTERNET_MSG);
         }
@@ -266,6 +275,65 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 //        return isValid;
         return true;
     }
+
+    // OPT dialog
+
+    public void showOtpDialog(){
+
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View dialogLayout = inflater.inflate(R.layout.otp_dialog_view, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(dialogLayout);
+        final AlertDialog customAlertDialog = builder.create();
+        customAlertDialog.show();
+        customAlertDialog.setCancelable(false);
+
+        final TextView tvTimer=(TextView)dialogLayout.findViewById(R.id.tvTimer);
+        final TextView tvResendOtp=(TextView)dialogLayout.findViewById(R.id.tvResendOtp);
+        TextView tvSubmit=(TextView)dialogLayout.findViewById(R.id.tvSubmit);
+        TextView tvCancel = (TextView)dialogLayout.findViewById(R.id.tvCancel);
+        EditText etOtp=(EditText)dialogLayout.findViewById(R.id.etOtp);
+        startTimer(tvTimer,tvResendOtp);
+        tvResendOtp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tvResendOtp.setVisibility(View.GONE);
+                startTimer(tvTimer, tvResendOtp);
+            }
+        });
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                customAlertDialog.dismiss();
+            }
+        });
+    }
+
+    public void startTimer(final TextView textView, final TextView tvResendOtp){
+        final long maxTime=4*60*1000;
+
+        new CountDownTimer(maxTime, 1000) {
+            long currentTime=maxTime;
+
+            public void onTick(long millisUntilFinished) {
+                int mins= (int) ((currentTime/1000)/60);
+                int secs= (int) ((currentTime/1000)%60);
+                if(secs<10){
+                    textView.setText(mins+":"+"0"+secs +" sec");
+                }else {
+                    textView.setText(mins+":"+secs+" sec");
+                }
+                currentTime=currentTime - 1000;
+            }
+
+            public void onFinish() {
+                textView.setText("0:00 sec");
+                tvResendOtp.setVisibility(View.VISIBLE);
+            }
+
+        }.start();
+    }
+
 
     // Add image to Profile
 

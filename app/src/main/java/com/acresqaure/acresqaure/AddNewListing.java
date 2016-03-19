@@ -25,10 +25,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class AddNewListing extends Activity implements View.OnClickListener {
+public class AddNewListing extends NavigationDrawerBaseActivity implements View.OnClickListener {
 
     TwoWayView twImages;
-    ImageView ivAddButton,ivCoverImage,ivAddImage;
+    ImageView ivAddButton,ivCoverImage,ivAddImage,ivNavigationDrawer;
 
     final int IMAGE_PICK_REQUEST_CODE =102;
     final int IMAGE_CAPTURE_REQUEST_CODE=103;
@@ -41,7 +41,7 @@ public class AddNewListing extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_new_listing);
+        super.setContent(R.layout.activity_add_new_listing);
         getViewId();
         setOnClickListener();
     }
@@ -51,10 +51,12 @@ public class AddNewListing extends Activity implements View.OnClickListener {
         ivAddButton = (ImageView)findViewById(R.id.ivAdd);
         ivCoverImage = (ImageView)findViewById(R.id.ivCoverImage);
         ivAddImage = (ImageView)findViewById(R.id.ivAddImage);
+        ivNavigationDrawer = (ImageView)findViewById(R.id.ivNavigationDrawer);
     }
 
     public void setOnClickListener(){
         ivAddButton.setOnClickListener(this);
+        ivNavigationDrawer.setOnClickListener(this);
     }
 
     @Override
@@ -62,6 +64,9 @@ public class AddNewListing extends Activity implements View.OnClickListener {
         switch (view.getId()){
             case R.id.ivAdd:
                 addImage();
+                break;
+            case R.id.ivNavigationDrawer:
+                super.openNavigationDrawer();
                 break;
         }
 

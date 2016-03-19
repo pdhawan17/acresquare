@@ -13,12 +13,14 @@ import org.apache.http.entity.mime.content.FileBody;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by albert on 14-3-21.
  */
 public class MultipartRequest extends Request<String> {
-    public static final String KEY_PICTURE = "image";
+    public static final String KEY_PICTURE = "userPhoto";
     public static final String KEY_PICTURE_NAME = "filename";
     public static final String KEY_ROUTE_ID = "route_id";
 
@@ -57,8 +59,11 @@ public class MultipartRequest extends Request<String> {
         String fileName = file.getName();
         FileBody fileBody = new FileBody(file);
         builder.addPart(KEY_PICTURE, fileBody);
-        builder.addTextBody(KEY_PICTURE_NAME, fileName);
-        builder.addTextBody(KEY_ROUTE_ID, mRouteId);
+//        builder.addTextBody(KEY_PICTURE_NAME, fileName);
+//        builder.addTextBody(KEY_ROUTE_ID, mRouteId);
+
+
+
         return builder.build();
     }
 
@@ -76,6 +81,15 @@ public class MultipartRequest extends Request<String> {
             VolleyLog.e("IOException writing to ByteArrayOutputStream");
         }
         return bos.toByteArray();
+    }
+
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+
+        HashMap<String,String> headers=new HashMap<>();
+        headers.put("Content-Type", "multipart/form-data");
+
+        return headers;
     }
 
     @Override

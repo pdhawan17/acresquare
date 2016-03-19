@@ -72,7 +72,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     public void login(){
         Utility.showProgressDialog(getActivity());
-        HttpUtility.PostRequest(URLs.LOGIN_URL, getJson(), new HttpUtility.ApiResponseListener() {
+        HttpUtility.PostRequest(getActivity(),URLs.LOGIN_URL, getJson(), new HttpUtility.ApiResponseListener() {
             @Override
             public void onResponse(String json) {
                 Utility.dismissProgressDialog();
@@ -89,7 +89,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 Utility.dismissProgressDialog();
                 showRetryDialog();
             }
-        });
+        },true);
     }
 
     public void showRetryDialog(){
